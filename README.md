@@ -1,10 +1,18 @@
 # TWITTER MEMES BOT
+<img src="https://github.com/cestoliv/twitter_memes_bot/raw/main/res/logo/logo.png" align="right"
+     alt="Twitter Memes Bot logo" width="250" height="250">
+     
 **TWITTER MEMES_BOT** is a Twitter bot that you can ask for a meme (by private messages or by mentioning it)
 
 ## Installation
-You will need a developer account on Twitter: create a Twitter app and development environment
+You will need a developer account on Twitter: **create a Twitter app**
+![Twitter apps](https://github.com/cestoliv/twitter_memes_bot/raw/main/res/screens/twitter_apps_overview.png)
+**change it's permission**
+![Twitter app permissions](https://github.com/cestoliv/twitter_memes_bot/raw/main/res/screens/twitter_apps_permissions.png)
+**and create a development environment**
+![Twitter development environment](https://github.com/cestoliv/twitter_memes_bot/raw/main/res/screens/twitter_dev_environnement.png)
 
-clone repository:
+**clone repository:**
 
     git clone https://github.com/cestoliv/twitter_memes_bot.git
     cd twitter_memes_bot
@@ -34,6 +42,9 @@ Edit **.env**:
 - TWITTER_ACCESS_TOKEN_SECRET = Twitter Access Secret
 - TWITTER_WEBHOOK_ENV= Twitter Dev environment label
 - PREFIX = prefix
+
+You will find the tokens of your Twitter application in its settings.
+![Twitter apps token](https://github.com/cestoliv/twitter_memes_bot/raw/main/res/screens/twitter_apps_tokens.png)
 
 ## Use
 ### Twitter Bot
