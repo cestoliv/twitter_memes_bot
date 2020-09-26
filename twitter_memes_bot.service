@@ -1,0 +1,20 @@
+[Unit]
+Description=Memes bot for Twitter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/home/cestoliv/PROD/CESTOLIV/memes_bot
+ExecStart=/usr/bin/npm start
+
+Restart=always
+
+RestartSec=10
+
+StandardOutput=syslog
+StandardError=syslog
+
+SyslogIdentifier=twitter_memes_bot
+
+[Install]
+WantedBy=multi-user.target
