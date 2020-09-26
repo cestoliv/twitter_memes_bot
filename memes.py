@@ -1,7 +1,6 @@
 import sqlite3
 import unidecode
 import operator
-import tweepy
 from termcolor import colored
 import sys
 import shutil
