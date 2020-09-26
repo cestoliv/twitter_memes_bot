@@ -4,7 +4,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-WorkingDirectory=/home/cestoliv/PROD/CESTOLIV/memes_bot
+WorkingDirectory=/home/cestoliv/PROD/CESTOLIV/twitter_memes_bot
 ExecStart=/usr/bin/npm start
 
 Restart=always
