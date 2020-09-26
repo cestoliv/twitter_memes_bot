@@ -48,6 +48,7 @@ You will find the tokens of your Twitter application in its settings.
 
 ## Use
 ### Twitter Bot
+You will need to run `python memes.py` a first time to create the database (you can then exit the program)
 
     npm start
 
@@ -62,3 +63,19 @@ You will find the tokens of your Twitter application in its settings.
 ### Memes management
 	
 	python memes.py
+
+## Troubleshooting
+
+### I have "No meme found ..." every time ...
+You must launch
+
+    rm db/Memes.db
+    python memes.py
+to create (or recreate) the database (you can exit immediately after)
+
+### sqlite3.OperationalError: no such table: Memes
+You must launch
+
+    rm db/Memes.db
+    python memes.py
+to create (or recreate) the database (you can exit immediately after)
