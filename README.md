@@ -53,6 +53,12 @@ You will find the tokens of your Twitter application in its settings.
 
 *You can use twitter_memes_bot.service to start the bot as a systemd service.*
 
+    sed -i "s?^WorkingDirectory=.*?WorkingDirectory=$(pwd)?g" twitter_memes_bot.service
+
+    cp twitter_memes_bot.service /etc/systemd/system/twitter_memes_bot.service
+
+    sudo systemctl start twitter_memes_bot
+
 ### Memes management
 	
 	python memes.py
