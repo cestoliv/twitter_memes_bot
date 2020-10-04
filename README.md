@@ -64,6 +64,8 @@ You will need to run `python memes.py` a first time to create the database (you 
 	
 	python memes.py
 
+To add new memes, add the images in the `memes` folder, launch the program, choose `add` then follow the instructions.
+
 ## Troubleshooting
 
 ### I have "No meme found ..." every time ...

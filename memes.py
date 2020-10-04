@@ -8,6 +8,7 @@ import glob
 import os
 from datetime import datetime
 import subprocess
+from PIL import Image
 
 db_file = "db/Memes.db"
 sql_file = "db/Memes.sql"
@@ -122,26 +123,7 @@ def get_memes(db_conn, query:str = None):
         db_results_noted.sort(key=operator.itemgetter('score'), reverse=True)
         return db_results_noted
 
-def add_meme(db_conn, file_path: str, file_name: str, keywords: str):
-    print(os.getcwd())
-    # check if meme don't still exists in files
-    new_file_path = "memes/" + file_name
-    new_file_path_without_extension = os.path.splitext(new_file_path)[0]
-
-    if glob.glob(new_file_path_without_extension + ".*"):
-        return {"status": "error", "errno": 3}
-
-    # copy image to meme folder
-    try :
-        shutil.copy(file_path, new_file_path)
-    except OSError as err:
-        print("add error : " + str(err.errno) + " : " + str(err))
-        if err.errno == 2:
-            return {"status": "error", "errno": 2}
-        else:
-            print("add error : " + err.errno + " : " + err)
-            return {"status": "error", "errno": -1}
-
+def add_meme(db_conn, file_name: str, keywords: str):
     # add meme to db
     keywords = unidecode.unidecode(keywords).lower()
     cur = db_conn.cursor()
@@ -163,7 +145,7 @@ def get_memes_not_in_db(db_conn):
     for meme in files_memes:
         if meme not in db_memes_files:
             files_not_in_db.append(meme)
-            
+
     return files_not_in_db
 
 def purge_memes(db_conn):
@@ -192,6 +174,10 @@ def purge_memes(db_conn):
     
     return {"db": db_to_remove, "files": files_to_remove}
 
+def kill_image_viewer():
+    for proc in psutil.process_iter():
+        if proc.name() == "display":
+            proc.kill()
 
 def console_main(db_conn):
     def get_action(db_conn):
@@ -236,22 +222,33 @@ def console_main(db_conn):
                 print(colored(str(len(memes)) + " result in the database", attrs=["bold"]))
         elif action == "add":
             #file_path = str(input("image path : "))
-            file_path = subprocess.check_output('read -e -p "image path : " var ; echo $var',shell=True).rstrip().decode('UTF-8')
-            print(file_path)
-            file_name = str(input("new image name : "))
-            keywords = str(input("keywords (separated by commas) : "))
+            files_to_add = get_memes_not_in_db(db_conn)
+
             print()
 
-            add_result = add_meme(db_conn, file_path, file_name, keywords)
-
-            if add_result["status"] == "sucess":
-                print(colored("Meme successfully added!", attrs=["bold"]))
+            if len(files_to_add) == 0:
+                print(colored("No new meme to add", attrs=["bold"]))
             else:
-                if "errno" in add_result:
-                    if add_result["errno"] == 2:
-                        print(colored("Image source file (" + file_path + ") does not exist", "red"))
-                    if add_result["errno"] == 3:
-                        print(colored("A meme with this name already exists (" + file_name + ")", "red"))
+                for meme_file in files_to_add:
+                    print(colored("New meme detected: " + meme_file, attrs=["bold"]))
+                    image_display = Image.open("memes/" + meme_file)
+                    image_display.show()
+
+                    keywords = str(input("keywords (separated by commas) : "))
+
+                    add_result = add_meme(db_conn, meme_file, keywords)
+
+                    if add_result["status"] == "sucess":
+                        print(colored("Meme successfully added!", attrs=["bold"]))
+                    else:
+                        if "errno" in add_result:
+                            if add_result["errno"] == 2:
+                                print(colored("Image source file (" + meme_file + ") does not exist", "red"))
+                            if add_result["errno"] == 3:
+                                print(colored("A meme with this name already exists (" + meme_file + ")", "red"))
+                    
+                    print()
+
         elif action == "purge":
             print("  This option will remove unnecessary SQL entries and unnecessary files, do you want to continue? " + colored("(y / n)", attrs=["bold"]))
             continue_input = str(input("  -> ")).lower()
