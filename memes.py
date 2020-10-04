@@ -151,6 +151,21 @@ def add_meme(db_conn, file_path: str, file_name: str, keywords: str):
     db_dump(db_conn)
     return {"status": "sucess"}
 
+def get_memes_not_in_db(db_conn):
+    db_memes = get_memes(db_conn)
+    db_memes_files = []
+    for meme in db_memes:
+        db_memes_files.append(meme["file"])
+
+    files_memes = os.listdir("memes")
+
+    files_not_in_db = []
+    for meme in files_memes:
+        if meme not in db_memes_files:
+            files_not_in_db.append(meme)
+            
+    return files_not_in_db
+
 def purge_memes(db_conn):
     db_memes = get_memes(db_conn)
     db_memes_files = []
@@ -169,11 +184,9 @@ def purge_memes(db_conn):
     db_conn.commit()
 
     # if no db entry
-    files_to_remove = []
-    for meme in files_memes:
-        if meme not in db_memes_files:
-            files_to_remove.append(meme)
-            os.remove("memes/" + meme)
+    files_to_remove = get_memes_not_in_db(db_conn)
+    for meme in files_to_remove:
+        os.remove("memes/" + meme)
 
     db_dump(db_conn)
     
